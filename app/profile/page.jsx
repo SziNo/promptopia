@@ -14,13 +14,16 @@ const MyProfile = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${session?.user.id}/posts`);
-      if (!response.ok) {
-        throw Error('Error occured during fetching posts');
+      try {
+        const response = await fetch(`/api/users/${session?.user.id}/posts`);
+        if (!response.ok) {
+          throw Error('Error occurred during fetching posts');
+        }
+        const data = await response.json();
+        setMyPosts(data);
+      } catch (error) {
+        console.error('Error in fetchPosts (session.user.id):', error);
       }
-      const data = await response.json();
-
-      setMyPosts(data);
     };
 
     if (session?.user.id) fetchPosts();

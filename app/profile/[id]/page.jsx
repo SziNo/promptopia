@@ -13,13 +13,16 @@ const UserProfile = ({ params }) => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch(`/api/users/${params?.id}/posts`);
-      if (!response.ok) {
-        throw Error('Error occured during fetching posts');
+      try {
+        const response = await fetch(`/api/users/${params?.id}/posts`);
+        if (!response.ok) {
+          throw Error('Error occurred during fetching posts');
+        }
+        const data = await response.json();
+        setUserPosts(data);
+      } catch (error) {
+        console.error('Error in fetchPosts (params.id):', error);
       }
-      const data = await response.json();
-
-      setUserPosts(data);
     };
 
     if (params?.id) fetchPosts();

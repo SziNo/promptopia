@@ -13,17 +13,23 @@ const UpdatePrompt = () => {
   const [post, setPost] = useState({ prompt: '', tag: '' });
   const [submitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    const getPromptDetails = async () => {
+  const getPromptDetails = async () => {
+    try {
       const response = await fetch(`/api/prompt/${promptId}`);
+      if (!response.ok) {
+        throw Error('Error occurred during fetching prompt!');
+      }
       const data = await response.json();
-
       setPost({
         prompt: data.prompt,
         tag: data.tag,
       });
-    };
+    } catch (error) {
+      console.error('Error in getPromptDetails:', error);
+    }
+  };
 
+  useEffect(() => {
     if (promptId) getPromptDetails();
   }, [promptId]);
 

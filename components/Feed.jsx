@@ -27,13 +27,16 @@ const Feed = () => {
   const [searchedResults, setSearchedResults] = useState([]);
 
   const fetchPosts = async () => {
-    const response = await fetch('/api/prompt');
-    if (!response.ok) {
-      throw Error('Error occured during fetching!');
+    try {
+      const response = await fetch('/api/prompt');
+      if (!response.ok) {
+        throw Error('Error occurred during fetching prompt!');
+      }
+      const data = await response.json();
+      setAllPosts(data);
+    } catch (error) {
+      console.error('Error in fetchPosts:', error);
     }
-    const data = await response.json();
-
-    setAllPosts(data);
   };
 
   useEffect(() => {
